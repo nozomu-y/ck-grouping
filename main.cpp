@@ -1,4 +1,7 @@
-#include <bits/stdc++.h>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
 
 int evaluate(vector<vector<int>> pair, vector<int> teach, int N, int D, int P);
