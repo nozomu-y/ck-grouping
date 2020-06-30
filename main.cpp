@@ -34,7 +34,7 @@ int main() {
 	// }
 
 	score = evaluate(pair, teach, N, D, P);
-	printf("Each Day is divided into %d periods.\n", P);
+	printf("Each day is divided into %d periods.\n", P);
 	printf("There are %d days in this testcase. \n", D);
 
 	printf("\nThe following data is given for each member. \n");
@@ -108,7 +108,7 @@ int main() {
 		for (int j = 0; j < D * P; j++) {
 			if (pair[i][j] != -1) {
 				// printf("%d -> %d at %d\n", pair[i][j], i, j);
-				cout << left << setw(7) << name[pair[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / P << " Period " << j % P << endl;
+				cout << left << setw(7) << name[pair[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / P + 1 << " Period " << j % P + 1 << endl;
 				teach_cnt[pair[i][j]]++;
 				learn_cnt[i]++;
 			}

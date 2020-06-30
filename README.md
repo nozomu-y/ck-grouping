@@ -15,7 +15,7 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 
 > $N$ $D$ $P$
 
-この後，団員 $i=\{1,2,\cdots,N\}$ について，以下の情報を与えてください．  
+この後，団員 $i=\{1,2,\cdots,N\}$ について，以下の情報を与えてください．
 
 - $S_i$ : 団員 $i$ の名前
 - $t_i$ : 団員 $i$ が指導可能である場合は $1$ ，指導不能な場合は $0$
@@ -67,12 +67,12 @@ Charles
 
 ```
 Teacher  -> Learner
-Charles  -> Alex     at Day 1 Period 1
-Charles  -> Alex     at Day 5 Period 3
-Alex     -> Brian    at Day 0 Period 0
-Alex     -> Brian    at Day 3 Period 0
-Alex     -> Charles  at Day 5 Period 1
-Alex     -> Charles  at Day 6 Period 0
+Charles  -> Alex     at Day 2 Period 2
+Charles  -> Alex     at Day 6 Period 4
+Alex     -> Brian    at Day 1 Period 1
+Alex     -> Brian    at Day 4 Period 1
+Alex     -> Charles  at Day 6 Period 2
+Alex     -> Charles  at Day 7 Period 1
 ```
 
 ## ファイル
