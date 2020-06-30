@@ -3,6 +3,8 @@
 Aud. や C.&C. 用の組分けアルゴリズムです．  
 各パートごとに見る側・見られる側のペアを決定します．
 
+[PDF 版](https://github.com/nozomu-y/ck-grouping/blob/master/README.pdf)
+
 ## 入力
 
 入力は以下の形式で標準入力から与えてください．
