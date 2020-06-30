@@ -3,11 +3,10 @@ There are 14 days in this testcase.
 
 The following data is given for each member. 
 * name
-* wether the member can teach or not
-* schedule for each P
+* whether the member can teach or not
+* schedule for each period
 
 The horizontal axis in the chart below expresses each period. (14 x 12)
-
 
  - : occupied
  * : vacant

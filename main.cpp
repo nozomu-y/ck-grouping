@@ -39,12 +39,12 @@ int main() {
 
 	printf("\nThe following data is given for each member. \n");
 	printf("* name\n");
-	printf("* wether the member can teach or not\n");
-	printf("* schedule for each P\n");
+	printf("* whether the member can teach or not\n");
+	printf("* schedule for each period\n");
 
 	printf("\nThe horizontal axis in the chart below expresses each period. (%d x %d)\n\n", D, P);
 
-	printf("\n - : occupied\n");
+	printf(" - : occupied\n");
 	printf(" * : vacant\n\n");
 
 	printf("Initial State    score: %d/%d\n", score, (500 + 100) * N);
