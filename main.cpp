@@ -28,7 +28,7 @@ int main() {
 
 	gp.print_explanation();
 	gp.print_schedule();
-	gp.anneal(100000);
+	gp.anneal();
 	gp.print_schedule();
 	gp.print_pairs();
 
