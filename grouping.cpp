@@ -9,12 +9,14 @@ class Grouping {
 	int N;
 	int D;
 	int P;
+	int score;
+	int loop_cnt = 0;
 	vector<string> name;
 	vector<int> teach;
 	vector<vector<int>> schedule;
 	vector<vector<int>> pairs;
-	int score;
-	int loop_cnt = 0;
+	int evaluate(vector<vector<int>>);
+	vector<vector<int>> change_random(vector<vector<int>>);
 
    public:
 	void set_variable(int, int, int);
@@ -23,8 +25,6 @@ class Grouping {
 	void print_pairs();
 	void print_explanation();
 	void anneal(int);
-	int evaluate(vector<vector<int>>);
-	vector<vector<int>> change_random(vector<vector<int>>);
 };
 
 void Grouping::anneal(int repeat = 10000) {
@@ -119,7 +119,7 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 	return score;
 }
 
-void Grouping::set_variable(int N, int P, int D) {
+void Grouping::set_variable(int N, int D, int P) {
 	this->N = N;
 	this->D = D;
 	this->P = P;
@@ -169,7 +169,7 @@ void Grouping::print_pairs() {
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < D * P; j++) {
 			if (pairs[i][j] != -1) {
-				cout << left << setw(7) << name[pairs[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / P + 1 << " Period " << j % P + 1 << endl;
+				cout << left << setw(7) << name[pairs[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / P + 1 << " Period " << right << setw(2) << j % P + 1 << endl;
 				teach_cnt[pairs[i][j]]++;
 				learn_cnt[i]++;
 			}
@@ -206,33 +206,4 @@ void Grouping::print_explanation() {
 
 	printf(" - : occupied\n");
 	printf(" * : vacant\n\n");
-}
-
-int main() {
-	int N, D, P;
-	cin >> N >> D >> P;
-	vector<int> teach(N);
-	vector<string> name(N);
-	vector<vector<int>> schedule(N, vector<int>(D * P));
-	for (int i = 0; i < N; i++) {
-		cin >> name[i];
-		cin >> teach[i];
-		for (int j = 0; j < D * P; j++) {
-			cin >> schedule[i][j];
-		}
-	}
-
-	srand(time(NULL));
-
-	Grouping gp;
-	gp.set_variable(N, D, P);
-	gp.set_vectors(name, teach, schedule);
-
-	gp.print_explanation();
-	gp.print_schedule();
-	gp.anneal(100000);
-	gp.print_schedule();
-	gp.print_pairs();
-
-	return 0;
 }

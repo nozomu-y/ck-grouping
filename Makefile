@@ -1,11 +1,14 @@
 CXX = /usr/local/bin/g++-9
-OBJS = grouping
+OBJS = main grouping
 
-%: %.cpp
-	$(CXX) -Wall -std=c++14 $< -o $@
+main: main.cpp grouping.cpp
+	$(CXX) -Wall -std=c++14 main.cpp -o main
 
-test: grouping testcase/sample.in
-	./grouping < testcase/sample.in >| testcase/sample.out
+grouping: grouping.cpp
+	$(CXX) -Wall -std=c++14 grouping.cpp -o grouping
+
+test: main testcase/sample.in
+	./main < testcase/sample.in >| testcase/sample.out
 
 testcase/sample.in: generator.py
 	python3 generator.py
