@@ -77,7 +77,7 @@ Alex     -> Charles  at Day 7 Period 1
 
 ## ファイル
 
-### main.cpp
+### grouping.cpp
 
 本体．
 
