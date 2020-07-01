@@ -67,7 +67,7 @@ vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
 }
 
 int Grouping::evaluate(vector<vector<int>> pairs) {
-	int score;
+	int score = 0;
 	vector<int> teach_cnt(N, 0);
 	for (int i = 0; i < N; i++) {
 		vector<int> count(N, 0);
