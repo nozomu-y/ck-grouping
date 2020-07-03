@@ -1,21 +1,39 @@
+/**
+ * @file    grouping.cpp
+ * @brief   Grouping Algorithm for one-on-one practice. 
+ * @author  18T Nozomu Yamazaki
+ * @date    2020-06-30 
+ * 
+ * Copyright (c) 2020 Nozomu Yamazaki
+ * Released under the MIT license
+ * https://opensource.org/licenses/mit-license.php
+ */
+
 #include <iomanip>
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
+/**
+ * @class   Grouping
+ * @brief   Grouping Algorithm
+ */
 class Grouping {
    private:
-	int N;
-	int D;
-	int P;
-	int score;
-	int loop_cnt = 0;
-	vector<string> name;
-	vector<int> teach;
-	vector<vector<int>> schedule;
-	vector<vector<int>> pairs;
+	int N;                         //! Number of members
+	int D;                         //! Number of days
+	int P;                         //! Number of periods
+	int score;                     //! Highest score at the time
+	int loop_cnt = 0;              //! Number of times change_random was executed
+	vector<string> name;           //! Name for each member
+	vector<int> teach;             //! Whether the member can teach of not
+	vector<vector<int>> schedule;  //! Schedule for each member
+	vector<vector<int>> pairs;     //! Pairs of members. This will be the final output
+
+	/*! Evaluates the score of the current state */
 	int evaluate(vector<vector<int>>);
+	/*! Changes the state randomly */
 	vector<vector<int>> change_random(vector<vector<int>>);
 
    public:
@@ -24,6 +42,7 @@ class Grouping {
 	void print_schedule();
 	void print_pairs();
 	void print_explanation();
+	/*! Start Simulated Annealing */
 	void anneal(int);
 };
 
@@ -45,9 +64,9 @@ void Grouping::anneal(int repeat = 10000) {
 };
 
 vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
-	int i = rand() % N;  // teach
-	int j = rand() % N;  // learn
-	int k = rand() % (P * D);
+	int i = rand() % N;        // index of teacher
+	int j = rand() % N;        // index of learner
+	int k = rand() % (P * D);  // index of period
 	if (i != j) {
 		if (teach[i] == 1 && schedule[i][k] == 1 && schedule[j][k] == 1 && pairs[i][k] == -1) {
 			for (int l = 0; l < N; l++) {
