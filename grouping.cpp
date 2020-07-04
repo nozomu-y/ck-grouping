@@ -51,7 +51,6 @@ class Grouping {
 	void print_schedule();
 	void print_pairs();
 	void print_explanation();
-	/*! Start Simulated Annealing */
 	void anneal(int);
 };
 
@@ -94,7 +93,6 @@ void Grouping::print_timetable() {
 					}
 				}
 			}
-			// printf("\n");
 		}
 		printf("\n");
 	}
@@ -136,9 +134,6 @@ vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
 						return pairs;
 					}
 				}
-				// if (pairs[l][k] == i || pairs[l][k] == j) {
-				// 	return pairs;
-				// }
 			}
 
 			bool vacant = true;
@@ -153,12 +148,6 @@ vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
 			} else {
 				pairs[j][k] = -1;
 			}
-
-			// if (pairs[j][k] != -1) {
-			// 	pairs[j][k] = -1;
-			// } else {
-			// 	pairs[j][k] = i;
-			// }
 		}
 	}
 	return pairs;
@@ -188,7 +177,6 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 			if (count[j] == R && learn_cnt == R) {
 				score += 1000;
 			} else if (count[j] != 0) {
-				// score -= abs(R - count[j]) * 500;
 				score -= abs(R - count[j]) * 500;
 			}
 		}
@@ -197,9 +185,6 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 		if (teach_cnt[i] >= 2 * R) {
 			score -= (teach_cnt[i] - 2 * R) * 100;
 		}
-		//  else if (teach_cnt[i] < 2 && teach[i] == 1) {
-		// score -= 100;
-		// }
 	}
 	for (int i = 0; i < N; i++) {
 		vector<int> day(D, 0);
