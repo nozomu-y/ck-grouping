@@ -9,6 +9,16 @@ using namespace std;
 int main() {
 	int N, D, P, Q, R;
 	cin >> N >> D >> P >> Q >> R;
+	vector<string> date(D);
+	vector<string> start(P);
+	vector<string> end(P);
+	for (int i = 0; i < D; i++) {
+		cin >> date[i];
+	}
+	for (int i = 0; i < P; i++) {
+		cin >> start[i] >> end[i];
+	}
+
 	vector<int> teach(N);
 	vector<string> name(N);
 	vector<vector<int>> schedule(N, vector<int>(D * P));
@@ -24,13 +34,13 @@ int main() {
 
 	Grouping gp;
 	gp.set_variable(N, D, P, Q, R);
-	gp.set_vectors(name, teach, schedule);
+	gp.set_vectors(date, start, end, name, teach, schedule);
 
 	gp.print_explanation();
 	gp.print_schedule();
 	gp.create_timetable();
 	gp.print_timetable();
-	gp.anneal(1000000);
+	gp.anneal(10000);
 	gp.print_timetable();
 	gp.print_pairs();
 

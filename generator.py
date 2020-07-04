@@ -10,6 +10,10 @@ filename = './testcase/sample.in'
 f = open(filename, mode='w')
 
 f.write(str(N) + ' ' + str(D) + ' ' + str(P) + ' ' + str(Q) + ' ' + str(R) + '\n')
+for i in range(D):
+    f.write("Day" + str(i + 1) + "\n")
+for i in range(P):
+    f.write("Period" + str(i + 1) + " " + "Period" + str(i + 1) + "\n")
 
 teach_cnt = 0
 
