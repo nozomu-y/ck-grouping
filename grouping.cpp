@@ -34,6 +34,9 @@ class Grouping {
 	vector<vector<int>> schedule;   //! Schedule for each member
 	vector<vector<int>> timetable;  //! Timetable for each member
 	vector<vector<int>> pairs;      //! Pairs of members. This will be the final output
+	vector<string> date;
+	vector<string> start;
+	vector<string> end;
 
 	/*! Evaluates the score of the current state */
 	int evaluate(vector<vector<int>>);
@@ -42,7 +45,7 @@ class Grouping {
 
    public:
 	void set_variable(int, int, int, int, int);
-	void set_vectors(vector<string>, vector<int>, vector<vector<int>>);
+	void set_vectors(vector<string>, vector<string>, vector<string>, vector<string>, vector<int>, vector<vector<int>>);
 	void create_timetable();
 	void print_timetable();
 	void print_schedule();
@@ -233,7 +236,10 @@ void Grouping::set_variable(int N, int D, int P, int Q, int R) {
 	}
 }
 
-void Grouping::set_vectors(vector<string> name, vector<int> teach, vector<vector<int>> schedule) {
+void Grouping::set_vectors(vector<string> date, vector<string> start, vector<string> end, vector<string> name, vector<int> teach, vector<vector<int>> schedule) {
+	this->date = date;
+	this->start = start;
+	this->end = end;
 	this->name = name;
 	this->teach = teach;
 	this->schedule = schedule;
@@ -260,13 +266,13 @@ void Grouping::print_schedule() {
 }
 
 void Grouping::print_pairs() {
-	printf("Teacher -> Learner\n");
+	printf("Teacher    -> Learner\n");
 	vector<int> teach_cnt(N, 0);
 	vector<int> learn_cnt(N, 0);
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < D * (P - Q + 1); j++) {
 			if (pairs[i][j] != -1) {
-				cout << left << setw(7) << name[pairs[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / (P - Q + 1) + 1 << " Period " << right << setw(2) << j % (P - Q + 1) + 1 << " to " << right << setw(2) << j % (P - Q + 1) + Q << endl;
+				cout << left << setw(3 * sizeof(2)) << name[pairs[i][j]] << " -> " << left << setw(3 * sizeof(2)) << name[i] << " at  " << left << setw(sizeof(date[P].length())) << date[j / (P - Q + 1)] << "  " << left << setw(sizeof(start[P].length())) << start[j % (P - Q + 1)] << " – " << left << setw(sizeof(end[P].length())) << end[j % (P - Q + 1) + Q - 1] << endl;
 				teach_cnt[pairs[i][j]]++;
 				learn_cnt[i]++;
 			}
