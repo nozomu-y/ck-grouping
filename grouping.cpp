@@ -51,7 +51,7 @@ class Grouping {
 	void print_schedule();
 	void print_pairs();
 	void print_explanation();
-	void anneal(int);
+	void local_search(int);
 };
 
 void Grouping::create_timetable() {
@@ -99,7 +99,7 @@ void Grouping::print_timetable() {
 	printf("\n");
 }
 
-void Grouping::anneal(int repeat = 10000) {
+void Grouping::local_search(int repeat = 10000) {
 	vector<vector<int>> pairs_new;
 	int score_new;
 	int refresh = 0;

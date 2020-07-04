@@ -40,7 +40,7 @@ int main() {
 	gp.print_schedule();
 	gp.create_timetable();
 	gp.print_timetable();
-	gp.anneal(10000);
+	gp.local_search(10000);
 	gp.print_timetable();
 	gp.print_pairs();
 
