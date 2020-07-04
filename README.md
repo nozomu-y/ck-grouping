@@ -11,15 +11,19 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 
 - $N$ : パート内の団員数
 - $D$ : 設定する期間の日数
-- $P$ : 1 日あたりの時限数
+- $P$ : 1 日あたりのコマ数
+- $Q$ : 1 回の練習あたりのコマ数
+- $R$ : 練習回数
 
-> $N$ $D$ $P$
+例えば， 1 コマ 2 時間であった場合，1 人あたりの最終的な練習時間は $2QR$ 時間になる．
+
+> $N$ $D$ $P$ $Q$ $R$
 
 この後，団員 $i=\{1,2,\cdots,N\}$ について，以下の情報を与えてください．
 
 - $S_i$ : 団員 $i$ の名前
 - $t_i$ : 団員 $i$ が指導可能である場合は $1$ ，指導不能な場合は $0$
-- $s_{i,d,p}$ : 団員 $i$ が $d$ 日目の $p$ 時限目に予定が空いている場合は $1$ ，空いていない場合は $0$
+- $s_{i,d,p}$ : 団員 $i$ が $d$ 日目の $p$ コマ目に予定が空いている場合は $1$ ，空いていない場合は $0$
 
 なお，$d=\{1,2,\cdots,D\},\ p=\{1,2,\cdots,P\}$ とします．
 
@@ -33,46 +37,46 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 ### 入力例
 
 ```
-3 7 6
+3 7 8 2 2
 Alex
-1
-1 1 1 0 1 0
-0 1 0 0 0 0
-0 0 1 1 0 0
-1 1 1 0 0 0
-0 0 0 1 1 0
-1 1 0 1 0 1
-1 0 0 1 1 1
-Brian
 0
-1 0 1 1 0 0
-0 0 0 0 0 0
-1 1 1 1 1 1
-1 0 0 1 0 1
-0 0 1 0 0 1
-0 0 0 0 1 0
-1 0 1 0 0 0
+1 0 0 1 1 1 0 1
+1 0 0 1 0 1 1 0
+1 0 1 0 0 0 1 0
+0 0 0 1 1 1 1 1
+0 0 0 0 1 1 1 1
+0 0 0 0 0 0 0 1
+1 1 1 0 1 1 0 0
+Brian
+1
+1 0 1 1 1 0 0 1
+1 0 1 1 1 1 0 1
+1 0 1 0 0 0 1 0
+1 1 1 0 0 1 1 1
+1 1 0 0 0 0 0 1
+1 0 1 1 0 1 1 0
+0 1 0 0 1 1 1 0
 Charles
 1
-0 1 0 0 1 0
-1 1 0 1 1 0
-1 0 0 0 0 0
-0 0 1 1 1 1
-1 0 1 0 0 0
-0 1 1 1 1 0
-1 0 1 0 0 0
+1 0 0 1 0 1 0 0
+1 0 1 1 1 1 0 1
+0 0 0 1 1 1 0 1
+1 1 1 1 0 1 0 0
+1 1 0 1 1 0 0 0
+0 1 0 1 0 1 0 0
+1 1 1 1 0 0 0 0
 ```
 
 ### 出力例
 
 ```
 Teacher  -> Learner
-Charles  -> Alex     at Day 2 Period 2
-Charles  -> Alex     at Day 6 Period 4
-Alex     -> Brian    at Day 1 Period 1
-Alex     -> Brian    at Day 4 Period 1
-Alex     -> Charles  at Day 6 Period 2
-Alex     -> Charles  at Day 7 Period 1
+Brian    -> Alex     at Day 4 Period 6 to 7
+Brian    -> Alex     at Day 7 Period 5 to 6
+Charles  -> Brian    at Day 2 Period 3 to 4
+Charles  -> Brian    at Day 2 Period 5 to 6
+Brian    -> Charles  at Day 4 Period 1 to 2
+Brian    -> Charles  at Day 5 Period 1 to 2
 ```
 
 ## ファイル
@@ -83,5 +87,4 @@ Alex     -> Charles  at Day 7 Period 1
 
 ### generator.py
 
-使い方: python3 generator.py  
 $N$, $D$, $P$ の値を入力することで，乱数を元にテストケースを作成します．
