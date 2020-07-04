@@ -9,6 +9,7 @@
  * https://opensource.org/licenses/mit-license.php
  */
 
+#include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -21,15 +22,18 @@ using namespace std;
  */
 class Grouping {
    private:
-	int N;                         //! Number of members
-	int D;                         //! Number of days
-	int P;                         //! Number of periods
-	int score;                     //! Highest score at the time
-	int loop_cnt = 0;              //! Number of times change_random was executed
-	vector<string> name;           //! Name for each member
-	vector<int> teach;             //! Whether the member can teach of not
-	vector<vector<int>> schedule;  //! Schedule for each member
-	vector<vector<int>> pairs;     //! Pairs of members. This will be the final output
+	int N;                          //! Number of members
+	int D;                          //! Number of days
+	int P;                          //! Number of periods per day
+	int Q;                          //! Number of periods per each practice
+	int R;                          //! Number of practices (begin taught) per each member
+	int score;                      //! Highest score at the time
+	int loop_cnt = 0;               //! Number of times change_random was executed
+	vector<string> name;            //! Name for each member
+	vector<int> teach;              //! Whether the member can teach of not
+	vector<vector<int>> schedule;   //! Schedule for each member
+	vector<vector<int>> timetable;  //! Timetable for each member
+	vector<vector<int>> pairs;      //! Pairs of members. This will be the final output
 
 	/*! Evaluates the score of the current state */
 	int evaluate(vector<vector<int>>);
@@ -37,14 +41,62 @@ class Grouping {
 	vector<vector<int>> change_random(vector<vector<int>>);
 
    public:
-	void set_variable(int, int, int);
+	void set_variable(int, int, int, int, int);
 	void set_vectors(vector<string>, vector<int>, vector<vector<int>>);
+	void create_timetable();
+	void print_timetable();
 	void print_schedule();
 	void print_pairs();
 	void print_explanation();
 	/*! Start Simulated Annealing */
 	void anneal(int);
 };
+
+void Grouping::create_timetable() {
+	timetable.resize(N);
+	for (int i = 0; i < N; i++) {
+		timetable[i].resize(D * (P - Q + 1));
+	}
+	for (int i = 0; i < N; i++) {
+		for (int d = 0; d < D; d++) {
+			for (int p = 0; p < P - Q + 1; p++) {
+				bool vacant = true;
+				for (int q = 0; q < Q; q++) {
+					if (schedule[i][P * d + p + q] == 0) {
+						vacant = false;
+					}
+				}
+				if (vacant) {
+					timetable[i][(P - Q + 1) * d + p] = 1;
+				} else {
+					timetable[i][(P - Q + 1) * d + p] = 0;
+				}
+			}
+		}
+	}
+}
+
+void Grouping::print_timetable() {
+	for (int i = 0; i < N; i++) {
+		cout << name[i] << endl;
+		for (int j = 0; j < D; j++) {
+			for (int p = 0; p < P - Q + 1; p++) {
+				if (pairs[i][j * (P - Q + 1) + p] != -1) {
+					printf("%d ", pairs[i][j * (P - Q + 1) + p]);
+				} else {
+					if (timetable[i][(P - Q + 1) * j + p] == 1) {
+						printf("* ");
+					} else {
+						printf("- ");
+					}
+				}
+			}
+			// printf("\n");
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
 
 void Grouping::anneal(int repeat = 10000) {
 	vector<vector<int>> pairs_new;
@@ -61,25 +113,49 @@ void Grouping::anneal(int repeat = 10000) {
 			pairs = pairs_new;
 		}
 	}
-};
+}
 
 vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
-	int i = rand() % N;        // index of teacher
-	int j = rand() % N;        // index of learner
-	int k = rand() % (P * D);  // index of period
+	int i = rand() % N;                  // index of teacher
+	int j = rand() % N;                  // index of learner
+	int k = rand() % ((P - Q + 1) * D);  // index of period
 	if (i != j) {
-		if (teach[i] == 1 && schedule[i][k] == 1 && schedule[j][k] == 1 && pairs[i][k] == -1) {
-			for (int l = 0; l < N; l++) {
-				if (pairs[l][k] == i || pairs[l][k] == j) {
+		if (teach[i] == 1 && timetable[i][k] == 1 && timetable[j][k] == 1 && pairs[i][k] == -1) {
+			for (int q = -Q + 1; q < Q; q++) {
+				if (pairs[i][k + q] != -1 && (k + q) / D == k / D) {
 					return pairs;
 				}
 			}
 
-			if (pairs[j][k] != -1) {
-				pairs[j][k] = -1;
-			} else {
-				pairs[j][k] = i;
+			for (int l = 0; l < N; l++) {
+				for (int q = -Q + 1; q < Q; q++) {
+					if ((pairs[l][k + q] == i || pairs[l][k + q] == j) && (k + q) / D == k / D) {
+						return pairs;
+					}
+				}
+				// if (pairs[l][k] == i || pairs[l][k] == j) {
+				// 	return pairs;
+				// }
 			}
+
+			bool vacant = true;
+			for (int q = -Q + 1; q < Q; q++) {
+				if (pairs[j][k + q] != -1) {
+					vacant = false;
+				}
+			}
+
+			if (vacant) {
+				pairs[j][k] = i;
+			} else {
+				pairs[j][k] = -1;
+			}
+
+			// if (pairs[j][k] != -1) {
+			// 	pairs[j][k] = -1;
+			// } else {
+			// 	pairs[j][k] = i;
+			// }
 		}
 	}
 	return pairs;
@@ -91,31 +167,32 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 	for (int i = 0; i < N; i++) {
 		vector<int> count(N, 0);
 		int learn_cnt = 0;
-		for (int j = 0; j < P * D; j++) {
+		for (int j = 0; j < (P - Q + 1) * D; j++) {
 			if (pairs[i][j] != -1) {
 				learn_cnt++;
 				count[pairs[i][j]]++;
 				teach_cnt[pairs[i][j]]++;
 			}
 		}
-		if (learn_cnt == 2) {
-			score += 100;
+		if (learn_cnt == R) {
+			score += 500;
 		} else if (learn_cnt == 0) {
 			score -= 1000;
 		} else {
-			score -= abs(2 - learn_cnt) * 100;
+			score += (learn_cnt / R) * 100;
 		}
 		for (int j = 0; j < N; j++) {
-			if (count[j] == 2 && learn_cnt == 2) {
-				score += 500;
+			if (count[j] == R && learn_cnt == R) {
+				score += 1000;
 			} else if (count[j] != 0) {
-				score -= 500;
+				// score -= abs(R - count[j]) * 500;
+				score -= abs(R - count[j]) * 500;
 			}
 		}
 	}
 	for (int i = 0; i < N; i++) {
-		if (teach_cnt[i] >= 4) {
-			score -= (teach_cnt[i] - 4) * 100;
+		if (teach_cnt[i] >= 2 * R) {
+			score -= (teach_cnt[i] - 2 * R) * 100;
 		}
 		//  else if (teach_cnt[i] < 2 && teach[i] == 1) {
 		// score -= 100;
@@ -123,9 +200,9 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 	}
 	for (int i = 0; i < N; i++) {
 		vector<int> day(D, 0);
-		for (int j = 0; j < D * P; j++) {
+		for (int j = 0; j < D * (P - Q + 1); j++) {
 			if (pairs[i][j] != -1) {
-				day[j / P]++;
+				day[j / (P - Q + 1)]++;
 			}
 		}
 		for (int j = 0; j < D; j++) {
@@ -138,17 +215,19 @@ int Grouping::evaluate(vector<vector<int>> pairs) {
 	return score;
 }
 
-void Grouping::set_variable(int N, int D, int P) {
+void Grouping::set_variable(int N, int D, int P, int Q, int R) {
 	this->N = N;
 	this->D = D;
 	this->P = P;
+	this->Q = Q;
+	this->R = R;
 	// initialize vector
 	pairs.resize(N);
 	for (int i = 0; i < N; i++) {
-		pairs[i].resize(D * P);
+		pairs[i].resize(D * (P - Q + 1));
 	}
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < D * P; j++) {
+		for (int j = 0; j < D * (P - Q + 1); j++) {
 			pairs[i][j] = -1;
 		}
 	}
@@ -162,19 +241,18 @@ void Grouping::set_vectors(vector<string> name, vector<int> teach, vector<vector
 }
 
 void Grouping::print_schedule() {
-	printf("Loop count: %d, score: %d/%d\n", loop_cnt, score, (500 + 100) * N);
+	printf("Loop count: %d, score: %d/%d\n", loop_cnt, score, (1500) * N);
 	for (int i = 0; i < N; i++) {
 		cout << name[i] << endl;
-		for (int j = 0; j < D * P; j++) {
-			if (pairs[i][j] != -1) {
-				printf("%d ", pairs[i][j]);
-			} else {
-				if (schedule[i][j] == 1) {
+		for (int j = 0; j < D; j++) {
+			for (int p = 0; p < P; p++) {
+				if (schedule[i][j * P + p] == 1) {
 					printf("* ");
 				} else {
 					printf("- ");
 				}
 			}
+			printf("\n");
 		}
 		printf("\n");
 	}
@@ -186,9 +264,9 @@ void Grouping::print_pairs() {
 	vector<int> teach_cnt(N, 0);
 	vector<int> learn_cnt(N, 0);
 	for (int i = 0; i < N; i++) {
-		for (int j = 0; j < D * P; j++) {
+		for (int j = 0; j < D * (P - Q + 1); j++) {
 			if (pairs[i][j] != -1) {
-				cout << left << setw(7) << name[pairs[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / P + 1 << " Period " << right << setw(2) << j % P + 1 << endl;
+				cout << left << setw(7) << name[pairs[i][j]] << " -> " << left << setw(7) << name[i] << "    at    Day " << right << setw(2) << j / (P - Q + 1) + 1 << " Period " << right << setw(2) << j % (P - Q + 1) + 1 << " to " << right << setw(2) << j % (P - Q + 1) + Q << endl;
 				teach_cnt[pairs[i][j]]++;
 				learn_cnt[i]++;
 			}
@@ -209,7 +287,8 @@ void Grouping::print_pairs() {
 		cout << name[i] << ": " << learn_cnt[i] << endl;
 	}
 	cout << endl;
-	printf("score: %d/%d\n", score, (500 + 100) * N);
+	printf("score: %d/%d\n", score, (1500) * N);
+	printf("loops: %d\n", loop_cnt);
 }
 
 void Grouping::print_explanation() {

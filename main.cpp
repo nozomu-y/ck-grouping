@@ -7,8 +7,8 @@
 using namespace std;
 
 int main() {
-	int N, D, P;
-	cin >> N >> D >> P;
+	int N, D, P, Q, R;
+	cin >> N >> D >> P >> Q >> R;
 	vector<int> teach(N);
 	vector<string> name(N);
 	vector<vector<int>> schedule(N, vector<int>(D * P));
@@ -23,13 +23,15 @@ int main() {
 	srand(time(NULL));
 
 	Grouping gp;
-	gp.set_variable(N, D, P);
+	gp.set_variable(N, D, P, Q, R);
 	gp.set_vectors(name, teach, schedule);
 
 	gp.print_explanation();
 	gp.print_schedule();
-	gp.anneal();
-	gp.print_schedule();
+	gp.create_timetable();
+	gp.print_timetable();
+	gp.anneal(1000000);
+	gp.print_timetable();
 	gp.print_pairs();
 
 	return 0;
