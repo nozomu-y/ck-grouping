@@ -65,7 +65,6 @@ class Grouping {
 Grouping::Grouping(string filename) {
 	ifstream ifs(filename);
 	ifs >> N >> D >> P >> Q >> R;
-	cout << R << endl;
 	date.resize(D);
 	for (int i = 0; i < D; i++) {
 		ifs >> date[i];
