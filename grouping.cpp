@@ -10,6 +10,7 @@
  */
 
 #include <cmath>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -22,18 +23,22 @@ using namespace std;
  */
 class Grouping {
    private:
-	int N;                          //! Number of members
-	int D;                          //! Number of days
-	int P;                          //! Number of periods per day
-	int Q;                          //! Number of periods per each practice
-	int R;                          //! Number of practices (begin taught) per each member
-	int score;                      //! Highest score at the time
-	int loop_cnt = 0;               //! Number of times change_random was executed
-	vector<string> name;            //! Name for each member
-	vector<int> teach;              //! Whether the member can teach of not
-	vector<vector<int>> schedule;   //! Schedule for each member
-	vector<vector<int>> timetable;  //! Timetable for each member
-	vector<vector<int>> pairs;      //! Pairs of members. This will be the final output
+	int N;           //! Number of members
+	int D;           //! Number of days
+	int P;           //! Number of periods per day
+	int Q;           //! Number of periods per each practice
+	int R;           //! Number of practices (begin taught) per each member
+	int score;       //! Highest score at the time
+	int score_best;  //! Highest score of all time
+	vector<vector<int>> score_hist;
+	int hist_index;
+	int loop_cnt = 0;                //! Number of times change_random was executed
+	vector<string> name;             //! Name for each member
+	vector<int> teach;               //! Whether the member can teach of not
+	vector<vector<int>> schedule;    //! Schedule for each member
+	vector<vector<int>> timetable;   //! Timetable for each member
+	vector<vector<int>> pairs;       //! Pairs of members. This will be the final output
+	vector<vector<int>> pairs_best;  //! Pairs of members. This will be the final output
 	vector<string> date;
 	vector<string> start;
 	vector<string> end;
@@ -44,6 +49,8 @@ class Grouping {
 	vector<vector<int>> change_random(vector<vector<int>>);
 
    public:
+	Grouping();
+	Grouping(string filename);
 	void set_variable(int, int, int, int, int);
 	void set_vectors(vector<string>, vector<string>, vector<string>, vector<string>, vector<int>, vector<vector<int>>);
 	void create_timetable();
@@ -52,7 +59,47 @@ class Grouping {
 	void print_pairs();
 	void print_explanation();
 	void local_search(int);
+	void global_search(int, int);
 };
+
+Grouping::Grouping(string filename) {
+	ifstream ifs(filename);
+	ifs >> N >> D >> P >> Q >> R;
+	cout << R << endl;
+	date.resize(D);
+	for (int i = 0; i < D; i++) {
+		ifs >> date[i];
+	}
+	start.resize(P);
+	end.resize(P);
+	for (int i = 0; i < P; i++) {
+		ifs >> start[i] >> end[i];
+	}
+	name.resize(N);
+	teach.resize(N);
+	schedule.resize(N);
+	for (int i = 0; i < N; i++) {
+		schedule[i].resize(D * P);
+	}
+	for (int i = 0; i < N; i++) {
+		ifs >> name[i];
+		ifs >> teach[i];
+		for (int j = 0; j < D * P; j++) {
+			ifs >> schedule[i][j];
+		}
+	}
+	srand(time(NULL));
+	pairs.resize(N);
+	for (int i = 0; i < N; i++) {
+		pairs[i].resize(D * (P - Q + 1));
+	}
+	for (int i = 0; i < N; i++) {
+		for (int j = 0; j < D * (P - Q + 1); j++) {
+			pairs[i][j] = -1;
+		}
+	}
+	score = evaluate(pairs);
+}
 
 void Grouping::create_timetable() {
 	timetable.resize(N);
@@ -102,18 +149,52 @@ void Grouping::print_timetable() {
 void Grouping::local_search(int repeat = 10000) {
 	vector<vector<int>> pairs_new;
 	int score_new;
+	score = evaluate(pairs);
 	int refresh = 0;
+	int i = 0;
+	score_hist[hist_index][i] = score;
 	while (refresh < repeat) {
+		i++;
 		loop_cnt++;
 		refresh++;
 		pairs_new = change_random(pairs);
+		pairs_new = change_random(pairs_new);
+		pairs_new = change_random(pairs_new);
 		score_new = evaluate(pairs_new);
 		if (score_new > score) {
 			refresh = 0;
 			score = score_new;
 			pairs = pairs_new;
 		}
+		score_hist[hist_index][i] = score;
+		// printf("%d ", score);
 	}
+}
+
+void Grouping::global_search(int repeat = 10, int local_search = 10000) {
+	score_best = 0;
+	score_hist.resize(repeat);
+	for (int i = 0; i < repeat; i++) {
+		score_hist[i].resize(local_search * 100);
+	}
+
+	for (int i = 0; i < repeat; i++) {
+		hist_index = i;
+		Grouping::local_search(local_search);
+		// printf("\n");
+		if (score > score_best) {
+			score_best = score;
+			pairs_best = pairs;
+		}
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < D * (P - Q + 1); j++) {
+				pairs[i][j] = -1;
+			}
+		}
+		score = 0;
+	}
+	pairs = pairs_best;
+	score = evaluate(pairs);
 }
 
 vector<vector<int>> Grouping::change_random(vector<vector<int>> pairs) {
