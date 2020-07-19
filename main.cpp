@@ -7,7 +7,7 @@
 using namespace std;
 
 int main() {
-	Grouping gp("./testcase/form.in");
+	Grouping gp("./testcase/sample.in");
 	gp.print_explanation();
 	gp.print_schedule();
 	gp.create_timetable();
