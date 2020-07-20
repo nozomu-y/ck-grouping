@@ -23,15 +23,13 @@ using namespace std;
  */
 class Grouping {
    private:
-	int N;           //! Number of members
-	int D;           //! Number of days
-	int P;           //! Number of periods per day
-	int Q;           //! Number of periods per each practice
-	int R;           //! Number of practices (begin taught) per each member
-	int score;       //! Highest score at the time
-	int score_best;  //! Highest score of all time
-	vector<vector<int>> score_hist;
-	int hist_index;
+	int N;                           //! Number of members
+	int D;                           //! Number of days
+	int P;                           //! Number of periods per day
+	int Q;                           //! Number of periods per each practice
+	int R;                           //! Number of practices (begin taught) per each member
+	int score;                       //! Highest score at the time
+	int score_best;                  //! Highest score of all time
 	int loop_cnt = 0;                //! Number of times change_random was executed
 	vector<string> name;             //! Name for each member
 	vector<int> teach;               //! Whether the member can teach of not
@@ -47,6 +45,7 @@ class Grouping {
 	int evaluate(vector<vector<int>>);
 	/*! Changes the state randomly */
 	vector<vector<int>> change_random(vector<vector<int>>);
+	void progress_bar(int, int, int, int);
 
    public:
 	Grouping();
@@ -58,7 +57,7 @@ class Grouping {
 	void print_schedule();
 	void print_pairs();
 	void print_explanation();
-	void local_search(int);
+	void local_search(int, int, int);
 	void global_search(int, int);
 };
 
@@ -98,6 +97,7 @@ Grouping::Grouping(string filename) {
 		}
 	}
 	score = evaluate(pairs);
+	create_timetable();
 }
 
 void Grouping::create_timetable() {
@@ -145,13 +145,25 @@ void Grouping::print_timetable() {
 	printf("\n");
 }
 
-void Grouping::local_search(int repeat = 10000) {
+void Grouping::progress_bar(int refresh, int repeat, int global_now, int global_all) {
+	string bar;
+	int black = refresh / (repeat / 50);
+	int white = 50 - black;
+	for (int i = 0; i < black; i++) {
+		bar += "█";
+	}
+	for (int i = 0; i < white; i++) {
+		bar += ' ';
+	}
+	cout << '\r' << setw(log10(global_all) + 1) << global_now + 1 << "/" << global_all << " " << bar;
+}
+
+void Grouping::local_search(int global_now, int global_all, int repeat = 10000) {
 	vector<vector<int>> pairs_new;
 	int score_new;
 	score = evaluate(pairs);
 	int refresh = 0;
 	int i = 0;
-	score_hist[hist_index][i] = score;
 	while (refresh < repeat) {
 		i++;
 		loop_cnt++;
@@ -165,22 +177,15 @@ void Grouping::local_search(int repeat = 10000) {
 			score = score_new;
 			pairs = pairs_new;
 		}
-		score_hist[hist_index][i] = score;
-		// printf("%d ", score);
+		progress_bar(refresh, repeat, global_now, global_all);
 	}
 }
 
 void Grouping::global_search(int repeat = 10, int local_search = 10000) {
-	score_best = 0;
-	score_hist.resize(repeat);
+	score_best = evaluate(pairs);
 	for (int i = 0; i < repeat; i++) {
-		score_hist[i].resize(local_search * 100);
-	}
-
-	for (int i = 0; i < repeat; i++) {
-		hist_index = i;
-		Grouping::local_search(local_search);
-		// printf("\n");
+		Grouping::local_search(i, repeat, local_search);
+		cout << " " << setw(log10(1500 * N) + 1) << score << "/" << 1500 * N << endl;
 		if (score > score_best) {
 			score_best = score;
 			pairs_best = pairs;
@@ -331,6 +336,7 @@ void Grouping::print_schedule() {
 }
 
 void Grouping::print_pairs() {
+	cout << endl;
 	printf("Teacher    -> Learner\n");
 	vector<int> teach_cnt(N, 0);
 	vector<int> learn_cnt(N, 0);

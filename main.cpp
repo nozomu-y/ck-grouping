@@ -7,13 +7,8 @@
 using namespace std;
 
 int main() {
-	Grouping gp("./testcase/sample.in");
-	gp.print_explanation();
-	gp.print_schedule();
-	gp.create_timetable();
-	gp.print_timetable();
-	gp.global_search(100, 10000);
-	gp.print_timetable();
+	Grouping gp("./testcase/form.in");
+	gp.global_search(10, 10000);
 	gp.print_pairs();
 
 	return 0;
