@@ -1,8 +1,8 @@
 /**
  * @file    grouping.cpp
- * @brief   Grouping Algorithm for one-on-one practice. 
+ * @brief   Grouping Algorithm for one-on-one practice.
  * @author  18T Nozomu Yamazaki
- * @date    2020-06-30 
+ * @date    2020-06-30
  * 
  * Copyright (c) 2020 Nozomu Yamazaki
  * Released under the MIT license
@@ -40,6 +40,8 @@ class Grouping {
 	vector<string> date;
 	vector<string> start;
 	vector<string> end;
+	clock_t search_start;
+	clock_t search_remain = 0;
 
 	/*! Evaluates the score of the current state */
 	int evaluate(vector<vector<int>>);
@@ -155,7 +157,11 @@ void Grouping::progress_bar(int refresh, int repeat, int global_now, int global_
 	for (int i = 0; i < white; i++) {
 		bar += ' ';
 	}
-	cout << '\r' << setw(log10(global_all) + 1) << global_now + 1 << "/" << global_all << " " << bar;
+	cout << '\r' << setw(log10(global_all) + 1) << global_now + 1 << "/" << global_all << " " << bar << " " << setw(log10(1500 * N) + 1) << score << "/" << 1500 * N;
+	if (search_remain != 0) {
+		cout << "  ETA " << setfill('0') << right << setw(2) << search_remain / 60 << ":" << setw(2) << search_remain % 60 << setfill(' ') << right;
+	}
+	cout << "     ";
 }
 
 void Grouping::local_search(int global_now, int global_all, int repeat = 10000) {
@@ -183,9 +189,15 @@ void Grouping::local_search(int global_now, int global_all, int repeat = 10000) 
 
 void Grouping::global_search(int repeat = 10, int local_search = 10000) {
 	score_best = evaluate(pairs);
+	search_start = clock();
+	cout << "\e[?25l";
 	for (int i = 0; i < repeat; i++) {
 		Grouping::local_search(i, repeat, local_search);
-		cout << " " << setw(log10(1500 * N) + 1) << score << "/" << 1500 * N << endl;
+		string bar;
+		for (int i = 0; i < 50; i++) {
+			bar += "█";
+		}
+		cout << '\r' << setw(log10(repeat) + 1) << i + 1 << "/" << repeat << " " << bar << " " << setw(log10(1500 * N) + 1) << score << "/" << 1500 * N << "               " << endl;
 		if (score > score_best) {
 			score_best = score;
 			pairs_best = pairs;
@@ -196,7 +208,9 @@ void Grouping::global_search(int repeat = 10, int local_search = 10000) {
 			}
 		}
 		score = 0;
+		search_remain = ((clock() - search_start) / (i + 1)) * (repeat - i) / CLOCKS_PER_SEC;
 	}
+	cout << "\e[?25h";
 	pairs = pairs_best;
 	score = evaluate(pairs);
 }
@@ -377,7 +391,10 @@ void Grouping::print_explanation() {
 	printf("* whether the member can teach or not\n");
 	printf("* schedule for each period\n");
 
-	printf("\nThe horizontal axis in the chart below expresses each period. (%d x %d)\n\n", D, P);
+	printf(
+	    "\nThe horizontal axis in the chart below expresses each period. (%d x "
+	    "%d)\n\n",
+	    D, P);
 
 	printf(" - : occupied\n");
 	printf(" * : vacant\n\n");
