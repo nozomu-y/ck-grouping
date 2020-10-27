@@ -28,9 +28,9 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 > <img src="https://render.githubusercontent.com/render/math?math=\rm{date}_1"/><span/>  
 > <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>   
 > <img src="https://render.githubusercontent.com/render/math?math=\rm{date}_D"/>  
-> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_1%20\rm{end}_1"/>   
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_1\:\rm{end}_1"/>   
 > <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>   
-> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_P%20\rm{end}_P"/> 
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_P\:\rm{end}_P"/> 
 
 
 この後，団員 <img src="https://render.githubusercontent.com/render/math?math=i=\{1,2,\cdots,N\}"/> について，以下の情報を与えてください．
@@ -43,10 +43,10 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 
 > <img src="https://render.githubusercontent.com/render/math?math=S_i"/><span/>  
 > <img src="https://render.githubusercontent.com/render/math?math=t_i"/>  
-> <img src="https://render.githubusercontent.com/render/math?math=s_{i,1,1}%20s_{i,1,2}%20\cdots%20s_{i,1,P}"/>  
-> <img src="https://render.githubusercontent.com/render/math?math=s_{i,2,1}%20s_{i,2,2}%20\cdots%20s_{i,2,P}"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,1,1}\:s_{i,1,2}\:\cdots\:s_{i,1,P}"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,2,1}\:s_{i,2,2}\:\cdots\:s_{i,2,P}"/>  
 > <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>  
-> <img src="https://render.githubusercontent.com/render/math?math=s_{i,D,1}%20s_{i,D,2}%20\cdots%20s_{i,D,P}"/>
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,D,1}\:s_{i,D,2}\:\cdots\:s_{i,D,P}"/>
 
 ### 入力例
 
