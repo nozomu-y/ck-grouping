@@ -9,44 +9,44 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 
 入力は以下の形式で標準入力から与えてください．
 
-- $N$ : パート内の団員数
-- $D$ : 設定する期間の日数
-- $P$ : 1 日あたりのコマ数
-- $Q$ : 1 回の練習あたりのコマ数
-- $R$ : 練習回数
+- <img src="https://render.githubusercontent.com/render/math?math=N"/> : パート内の団員数
+- <img src="https://render.githubusercontent.com/render/math?math=D"/> : 設定する期間の日数
+- <img src="https://render.githubusercontent.com/render/math?math=P"/> : 1 日あたりのコマ数
+- <img src="https://render.githubusercontent.com/render/math?math=Q"/> : 1 回の練習あたりのコマ数
+- <img src="https://render.githubusercontent.com/render/math?math=R"/> : 練習回数
 
-例えば， 1 コマ 2 時間であった場合，1 人あたりの最終的な練習時間は $2QR$ 時間になる．
+例えば， 1 コマ 2 時間であった場合，1 人あたりの最終的な練習時間は <img src="https://render.githubusercontent.com/render/math?math=2QR"/> 時間になる．
 
-> $N$ $D$ $P$ $Q$ $R$
+> <img src="https://render.githubusercontent.com/render/math?math=N%20D%20P%20Q%20R"/>
 
 続いて，それぞれの日とコマの情報が与えられる．
 
-- $date_i$ : $i$ 日目の日付
-- $start_i$ : $i$ コマ目の開始時刻
-- $end_i$ : $i$ コマ目の終了時刻
+- <img src="https://render.githubusercontent.com/render/math?math=\rm{date}_i"/> : <img src="https://render.githubusercontent.com/render/math?math=i"/> 日目の日付
+- <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_i"/> : <img src="https://render.githubusercontent.com/render/math?math=i"/> コマ目の開始時刻
+- <img src="https://render.githubusercontent.com/render/math?math=\rm{end}_i"/> : <img src="https://render.githubusercontent.com/render/math?math=i"/> コマ目の終了時刻
 
-> $date_1$   
-> $\vdots$  
-> $date_D$  
-> $start_1$ $end_1$  
-> $\vdots$  
-> $start_P$ $end_P$
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{date}_1"/><span/>  
+> <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>   
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{date}_D"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_1%20\rm{end}_1"/>   
+> <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>   
+> <img src="https://render.githubusercontent.com/render/math?math=\rm{start}_P%20\rm{end}_P"/> 
 
 
-この後，団員 $i=\{1,2,\cdots,N\}$ について，以下の情報を与えてください．
+この後，団員 <img src="https://render.githubusercontent.com/render/math?math=i=\{1,2,\cdots,N\}"/> について，以下の情報を与えてください．
 
-- $S_i$ : 団員 $i$ の名前
-- $t_i$ : 団員 $i$ が指導可能である場合は $1$ ，指導不能な場合は $0$
-- $s_{i,d,p}$ : 団員 $i$ が $d$ 日目の $p$ コマ目に予定が空いている場合は $1$ ，空いていない場合は $0$
+- <img src="https://render.githubusercontent.com/render/math?math=S_i"/> : 団員 <img src="https://render.githubusercontent.com/render/math?math=i"/> の名前
+- <img src="https://render.githubusercontent.com/render/math?math=t_i"/> : 団員 <img src="https://render.githubusercontent.com/render/math?math=i"/> が指導可能である場合は <img src="https://render.githubusercontent.com/render/math?math=1"/> ，指導不能な場合は <img src="https://render.githubusercontent.com/render/math?math=0"/>
+- <img src="https://render.githubusercontent.com/render/math?math=s_{i,d,p}"/> : 団員 <img src="https://render.githubusercontent.com/render/math?math=i"/> が <img src="https://render.githubusercontent.com/render/math?math=d"/> 日目の <img src="https://render.githubusercontent.com/render/math?math=p"/> コマ目に予定が空いている場合は <img src="https://render.githubusercontent.com/render/math?math=1"/> ，空いていない場合は <img src="https://render.githubusercontent.com/render/math?math=0"/>
 
-なお，$d=\{1,2,\cdots,D\},\ p=\{1,2,\cdots,P\}$ とします．
+なお，<img src="https://render.githubusercontent.com/render/math?math=d=\{1,2,\cdots,D\}"/>, <img src="https://render.githubusercontent.com/render/math?math=p=\{1,2,\cdots,P\}"/> とします．
 
-> $S_i$  
-> $t_i$  
-> $s_{i,1,1}$ $s_{i,1,2}$ $\cdots$ $s_{i,1,P}$  
-> $s_{i,2,1}$ $s_{i,2,2}$ $\cdots$ $s_{i,2,P}$  
-> $\vdots$  
-> $s_{i,D,1}$ $s_{i,D,2}$ $\cdots$ $s_{i,D,P}$
+> <img src="https://render.githubusercontent.com/render/math?math=S_i"/><span/>
+> <img src="https://render.githubusercontent.com/render/math?math=t_i"/>
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,1,1}%20s_{i,1,2}%20\cdots%20s_{i,1,P}"/>
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,2,1}%20s_{i,2,2}%20\cdots%20s_{i,2,P}"/>
+> <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,D,1}%20s_{i,D,2}%20\cdots%20s_{i,D,P}"/>
 
 ### 入力例
 
@@ -101,4 +101,4 @@ Brian    -> Charles  at Day 5 Period 1 to 2
 
 ### generator.py
 
-$N$, $D$, $P$ の値を入力することで，乱数を元にテストケースを作成します．
+<img src="https://render.githubusercontent.com/render/math?math=N,D,P"/> の値を入力することで，乱数を元にテストケースを作成します．
