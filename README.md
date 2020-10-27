@@ -41,10 +41,10 @@ Aud. や C.&C. 用の組分けアルゴリズムです．
 
 なお，<img src="https://render.githubusercontent.com/render/math?math=d=\{1,2,\cdots,D\}"/>, <img src="https://render.githubusercontent.com/render/math?math=p=\{1,2,\cdots,P\}"/> とします．
 
-> <img src="https://render.githubusercontent.com/render/math?math=S_i"/><span/>
-> <img src="https://render.githubusercontent.com/render/math?math=t_i"/>
-> <img src="https://render.githubusercontent.com/render/math?math=s_{i,1,1}%20s_{i,1,2}%20\cdots%20s_{i,1,P}"/>
-> <img src="https://render.githubusercontent.com/render/math?math=s_{i,2,1}%20s_{i,2,2}%20\cdots%20s_{i,2,P}"/>
+> <img src="https://render.githubusercontent.com/render/math?math=S_i"/><span/>  
+> <img src="https://render.githubusercontent.com/render/math?math=t_i"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,1,1}%20s_{i,1,2}%20\cdots%20s_{i,1,P}"/>  
+> <img src="https://render.githubusercontent.com/render/math?math=s_{i,2,1}%20s_{i,2,2}%20\cdots%20s_{i,2,P}"/>  
 > <img src="https://render.githubusercontent.com/render/math?math=\vdots"/>  
 > <img src="https://render.githubusercontent.com/render/math?math=s_{i,D,1}%20s_{i,D,2}%20\cdots%20s_{i,D,P}"/>
 
